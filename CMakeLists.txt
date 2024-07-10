@@ -17,10 +17,24 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
+set(CMAKE_C_CLANG_TIDY
+  clang-tidy;
+  -checks=*;
+  -warnings-as-errors=*;
+)
+
+file(GLOB SRCS
+  "${CMAKE_CURRENT_SOURCE_DIR}/clox/*.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/clox/*.h"
+)
+
 add_executable(
   clox
-  main.cc
+  ${SRCS}
 )
+
+target_include_directories(clox PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/clox)
+
 target_link_libraries(
   clox
   GTest::gtest_main

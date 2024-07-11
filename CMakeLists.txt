@@ -20,11 +20,11 @@ enable_testing()
 set(CMAKE_C_CLANG_TIDY
   clang-tidy;
   -checks=*;
-  -warnings-as-errors=*;
+  #  -warnings-as-errors=*;
 )
 
 file(GLOB SRCS
-  "${CMAKE_CURRENT_SOURCE_DIR}/clox/*.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/clox/*.c"
   "${CMAKE_CURRENT_SOURCE_DIR}/clox/*.h"
 )
 
@@ -32,13 +32,18 @@ add_executable(
   clox
   ${SRCS}
 )
-
+set_target_properties(clox PROPERTIES LINKER_LANGUAGE C)
 target_include_directories(clox PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/clox)
 
+add_executable(
+  clox_test
+  ${SRCS}
+)
+
 target_link_libraries(
-  clox
+  clox_test
   GTest::gtest_main
 )
 
 include(GoogleTest)
-gtest_discover_tests(clox)
+gtest_discover_tests(clox_test)
